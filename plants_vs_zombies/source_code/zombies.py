@@ -6,6 +6,7 @@ class Zombie:
 
     def __init__(self):
         self.walk_image = load_image('zom_walk.png')
+        self.dead_image = load_image('zom_die.png')
         self.x, self.y = 1400, (random.randint(0, 4)*100)+60
         self.walk_frame = random.randint(0, 5)
 
