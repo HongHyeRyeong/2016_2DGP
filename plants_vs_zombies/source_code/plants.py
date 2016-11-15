@@ -122,3 +122,75 @@ class Walnut:
 
     def draw_bb(self):
         draw_rectangle(*self.get_bb())
+
+# stage2
+class Bomb:
+    def __init__(self):
+        self.image = load_image('bomb.png')
+        self.x, self.y = 0, 0
+        self.frame, self.total_frames = 0.0, 0.0
+
+    def creat(self, mousex, mousey):
+        self.x = int(mousex / 100) * 100 + 55
+        self.y = int(mousey / 100) * 100 + 50
+
+    def update(self, frame_time):
+        self.total_frames += FRAMES_PER_ACTION * ACTION_PER_TIME * frame_time
+        self.frame = int(self.total_frames + 1) % 4
+
+    def draw(self, frame_time):
+        self.image.clip_draw(self.frame * 100, 0, 100, 100, self.x, self.y)
+
+    def get_bb(self):
+        return self.x - 30, self.y - 30, self.x + 30, self.y + 30
+
+    def draw_bb(self):
+        draw_rectangle(*self.get_bb())
+
+# stage3
+class Snow_Plant:
+    def __init__(self):
+        self.image = load_image('snow_plant.PNG')
+        self.x, self.y = 0, 0
+        self.frame, self.total_frames = 0.0, 0.0
+        self.attackcnt = 0
+
+    def creat(self, mousex, mousey):
+        self.x = int(mousex / 100) * 100 + 55
+        self.y = int(mousey / 100) * 100 + 50
+
+    def update(self, frame_time):
+        self.total_frames += FRAMES_PER_ACTION * ACTION_PER_TIME * frame_time
+        self.frame = int(self.total_frames + 1) % 8
+
+        self.attackcnt += 1
+
+    def draw(self, frame_time):
+        self.image.clip_draw(self.frame * 100, 0, 100, 100, self.x, self.y)
+
+    def get_bb(self):
+        return self.x - 30, self.y - 30, self.x + 30, self.y + 30
+
+    def draw_bb(self):
+        draw_rectangle(*self.get_bb())
+
+class Snow_Attack:
+    def __init__(self):
+        self.image = load_image('snow_attack.png')
+        self.x, self.y = 0, 0
+
+    def creat(self, snowx, snowy):
+        self.x, self.y = snowx + 30, snowy + 10
+
+    def update(self, frame_time):
+        distance = RUN_SPEED_PPS * frame_time
+        self.x += distance
+
+    def draw(self, frame_time):
+        self.image.clip_draw(0, 0, 26, 26, self.x, self.y)
+
+    def get_bb(self):
+        return self.x - 10, self.y - 10, self.x + 10, self.y + 10
+
+    def draw_bb(self):
+        draw_rectangle(*self.get_bb())

@@ -1,5 +1,7 @@
 import game_framework
-import main_state
+import stage_1
+import stage_2
+import stage_3
 from pico2d import *
 
 
@@ -24,7 +26,7 @@ def handle_events(frame_time):
                 if event.key == SDLK_ESCAPE:
                     game_framework.quit()
                 elif event.key == SDLK_SPACE:
-                    game_framework.change_state(main_state)
+                    game_framework.change_state(stage_1)
 
 def draw(frame_time):
     clear_canvas()
