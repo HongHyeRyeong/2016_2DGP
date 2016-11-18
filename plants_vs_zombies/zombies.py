@@ -22,9 +22,9 @@ class Zombie:
         self.die_image = load_image('zom_die.png')
         self.x, self.y = 1400, (random.randint(0, 4)*100)+60
         self.slow = 0
+        self.state = self.WALK
         self.total_frames = 0.0
         self.walk_frame, self.attack_frame, self.die_frame = random.randint(0, 5), 0, 0
-        self.state = self.WALK
 
     def update(self, frame_time):
         distance = self.RUN_SPEED_PPS * frame_time
