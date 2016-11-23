@@ -32,8 +32,8 @@ sunpoint = 1000
 
 class Background:
     def __init__(self):
-        self.image = load_image('background.png')
-        self.selete = load_image('selete_plant.png')
+        self.image = load_image('resource/background.png')
+        self.selete = load_image('resource/selete_plant.png')
         self.gamestart = True
 
     def draw(self):
@@ -44,7 +44,7 @@ def enter():
     global back, font
     global plants, flowers, walnuts, zombies, attacks, suns
     back = Background()
-    font = load_font('ConsolaMalgun.ttf', 17)
+    font = load_font('resource/ConsolaMalgun.ttf', 17)
     plants = []
     flowers = []
     walnuts = []

@@ -17,9 +17,9 @@ class Zombie:
     WALK, ATTACK, DIE, END = 1, 2, 3, 4
 
     def __init__(self):
-        self.walk_image = load_image('zom_walk.png')
-        self.attack_image = load_image('zom_attack.png')
-        self.die_image = load_image('zom_die.png')
+        self.walk_image = load_image('resource/zom_walk.png')
+        self.attack_image = load_image('resource/zom_attack.png')
+        self.die_image = load_image('resource/zom_die.png')
         self.x, self.y = 1400, (random.randint(0, 4)*100)+60
         self.slow = 0
         self.state = self.WALK

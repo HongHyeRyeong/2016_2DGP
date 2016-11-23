@@ -13,7 +13,7 @@ FRAMES_PER_ACTION = 5
 
 class Plant:
     def __init__(self):
-        self.image = load_image('plant.png')
+        self.image = load_image('resource/plant.png')
         self.x, self.y = 0, 0
         self.frame, self.total_frames = 0.0, 0.0
         self.attackcnt = 0
@@ -39,7 +39,7 @@ class Plant:
 
 class Attack:
     def __init__(self):
-        self.image = load_image('attack.png')
+        self.image = load_image('resource/attack.png')
         self.x, self.y = 0, 0
 
     def creat(self, plantx, planty):
@@ -60,7 +60,7 @@ class Attack:
 
 class Flower:
     def __init__(self):
-        self.image = load_image('flower.png')
+        self.image = load_image('resource/flower.png')
         self.x, self.y = 0, 0
         self.frame, self.total_frames = 0.0, 0.0
         self.suncnt = 0
@@ -88,7 +88,7 @@ class Sun:
     FRAMES_PER_ACTION = 2
 
     def __init__(self):
-        self.image = load_image('sun.png')
+        self.image = load_image('resource/sun.png')
         self.x, self.y = random.randint(100, 1000), random.randint(100, 500)
         self.frame, self.total_frames = 0.0, 0.0
 
@@ -101,7 +101,7 @@ class Sun:
 
 class Walnut:
     def __init__(self):
-        self.image = load_image('walnut.png')
+        self.image = load_image('resource/walnut.png')
         self.x, self.y = 0, 0
         self.frame, self.total_frames = 0.0, 0.0
         self.life = 1
@@ -126,7 +126,7 @@ class Walnut:
 # stage2
 class Bomb:
     def __init__(self):
-        self.image = load_image('bomb.png')
+        self.image = load_image('resource/bomb.png')
         self.x, self.y = 0, 0
         self.frame, self.total_frames = 0.0, 0.0
 
@@ -150,7 +150,7 @@ class Bomb:
 # stage3
 class Snow_Plant:
     def __init__(self):
-        self.image = load_image('snow_plant.PNG')
+        self.image = load_image('resource/snow_plant.PNG')
         self.x, self.y = 0, 0
         self.frame, self.total_frames = 0.0, 0.0
         self.attackcnt = 0
@@ -176,7 +176,7 @@ class Snow_Plant:
 
 class Snow_Attack:
     def __init__(self):
-        self.image = load_image('snow_attack.png')
+        self.image = load_image('resource/snow_attack.png')
         self.x, self.y = 0, 0
 
     def creat(self, snowx, snowy):
