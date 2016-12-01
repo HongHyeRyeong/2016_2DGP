@@ -12,8 +12,6 @@ class Zombie:
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
     FRAMES_PER_ACTION = 5
 
-    attack_time = 0.0
-
     WALK, ATTACK, DIE, END = 1, 2, 3, 4
 
     def __init__(self):
@@ -22,6 +20,7 @@ class Zombie:
         self.die_image = load_image('resource/zom_die.png')
         self.x, self.y = 1400, (random.randint(0, 4)*100)+60
         self.slow = 0
+        self.attack_time = 0.0
         self.state = self.WALK
         self.total_frames = 0.0
         self.walk_frame, self.attack_frame, self.die_frame = random.randint(0, 5), 0, 0

@@ -8,51 +8,28 @@ import game_framework
 import title_state
 from plants import *
 from zombies import *
+from stage import*
 
 name = "MainState"
 
 # 객체
 stage = None
-plants = None
-flowers = None
+plants, attacks = None, None
+flowers, suns = None, None
 walnuts = None
 bombs = None
-snows = None
+snows, snow_attacks = None, None
 zombies = None
-attacks = None
-snow_attacks = None
-suns = None
 
 Not_Select, Plant_Select, Flower_Select,Walnut_Select, Bomb_Select, Snow_Select, Remove_Select = 0, 1, 2, 3, 4, 5, 6
 
 mouse_x, mouse_y = 0, 0
+sun_point = 1000
 select_plant = Not_Select
 space = [[0 for col in range(20)] for row in range(20)]
-zombie_cnt, random_cnt = 0, 10
-sun_point = 1000
-
-class Stage:
-    def __init__(self):
-        self.stage1_image = load_image('resource/stage1.png')
-        self.stage2_image = load_image('resource/stage2.png')
-        self.stage3_image = load_image('resource/stage3.png')
-        self.select_image = load_image('resource/select_plant.png')
-        self.font = load_font('resource/ConsolaMalgun.ttf', 17)
-        self.state = 'stage1'
-
-    def draw(self):
-        if self.state == 'stage1':
-            self.stage1_image.draw(700, 300)
-        elif self.state == 'stage2':
-            self.stage2_image.draw(700, 300)
-        elif self.state == 'stage3':
-            self.stage3_image.draw(700, 300)
-        self.select_image.clip_draw((select_plant - 1) * 100 + 10, 0, 100, 100, 1350, 545)
-        self.font.draw(20, 504, '%d' % sun_point)
 
 def enter():
-    global stage
-    global plants, flowers, walnuts, bombs, snows, zombies
+    global stage, plants, flowers, walnuts, bombs, snows, zombies
     global attacks, snow_attacks, suns
     stage = Stage()
     plants = []
@@ -66,12 +43,8 @@ def enter():
     zombies = []
 
 def exit():
-    global stage
-    global plants, flowers, walnuts, bombs, snows, zombies
+    global stage, plants, flowers, walnuts, bombs, snows, zombies
     global attacks, snow_attacks, suns
-    global mouse_x, mouse_y
-    global select_plant, space
-    global zombie_cnt, random_cnt, sun_point
     change_stage()
     del(stage)
     del(plants)
@@ -91,11 +64,13 @@ def resume():
     pass
 
 def select_space():
-    global space, mouse_x, mouse_y, select_plant
+    global space, select_plant
+    global mouse_x, mouse_y
     space[int(mouse_x / 100)][int(mouse_y / 100)] = 1
     select_plant = Not_Select
 
 def select_item():
+    global stage
     global mouse_x, mouse_y, select_plant
     if 100 < mouse_x < 155:
         select_plant = Plant_Select
@@ -120,7 +95,7 @@ def select_sun():
         suns.clear()
 
 def select_object():
-    global stage, plants, flowers, walnuts, bombs, snows
+    global plants, flowers, walnuts, bombs, snows
     global mouse_x, mouse_y
     global select_plant, space, sun_point
     if 260 < mouse_x < 980 and 90 < mouse_y < 600: # 땅
@@ -156,15 +131,12 @@ def select_object():
         select_sun()
 
 def creat():
-    global plants, zombies, attacks, suns, flowers, snows, snow_attacks
-    global zombie_cnt, random_cnt
+    global stage, plants, zombies, attacks, suns, flowers, snows, snow_attacks
 
-    zombie_cnt += 1
-    if zombie_cnt == random_cnt:
+    if stage.zombie_cnt == stage.random_cnt:
         new_zombie = Zombie()
         zombies.append(new_zombie)
-        random_cnt = random.randint(150, 200)
-        zombie_cnt = 0
+        stage.zombie_set_count()
     for plant in plants:
         if plant.attack_cnt == 200:
             new_attack = Attack(plant.x, plant.y)
@@ -248,10 +220,9 @@ def collide_check():
                 snow_attacks.remove(snow_attack)
 
 def change_stage():
-    global plants, flowers, walnuts, zombies, attacks, suns, bombs, snows, snow_attacks
+    global stage, plants, flowers, walnuts, zombies, attacks, suns, bombs, snows, snow_attacks
     global mouse_x, mouse_y
     global select_plant, space
-    global zombie_cnt, random_cnt
     global sun_point
     plants.clear()
     attacks.clear()
@@ -262,17 +233,16 @@ def change_stage():
     snows.clear()
     snow_attacks.clear()
     zombies.clear()
+    stage.cnt_init()
     mouse_x, mouse_y = 0, 0
     select_plant = Not_Select
-    zombie_cnt, random_cnt = 0, 10
     sun_point = 1000
     for i in range(20):
         for j in range(20):
             space[i][j] = 0
 
 def handle_events(frame_time):
-    global stage
-    global mouse_x, mouse_y
+    global stage, mouse_x, mouse_y
 
     events = get_events()
     for event in events:
@@ -295,9 +265,10 @@ def handle_events(frame_time):
             select_object()
 
 def update(frame_time):
-    global plants, flowers, walnuts, bombs, snows, zombies
+    global stage, plants, flowers, walnuts, bombs, snows, zombies
     global attacks, snow_attacks, suns
 
+    stage.update()
     for plant in plants:
         plant.update(frame_time)
     for attack in attacks:
@@ -323,8 +294,9 @@ def update(frame_time):
 def draw(frame_time):
     global stage, plants, flowers, walnuts, bombs, snows, zombies
     global attacks, snow_attacks, suns
+    global select_plant, sun_point
     clear_canvas()
-    stage.draw()
+    stage.draw(select_plant, sun_point)
     for plant in plants:
         plant.draw()
     for flower in flowers:
