@@ -12,23 +12,18 @@ ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 5
 
 class Plant:
-    def __init__(self):
+    def __init__(self, mouse_x, mouse_y):
         self.image = load_image('resource/plant.png')
-        self.x, self.y = 0, 0
+        self.x, self.y = int(mouse_x / 100) * 100 + 55, int(mouse_y / 100) * 100 + 50
         self.frame, self.total_frames = 0.0, 0.0
-        self.attackcnt = 0
-
-    def creat(self, mousex, mousey):
-        self.x = int(mousex / 100) * 100 + 55
-        self.y = int(mousey / 100) * 100 + 50
+        self.attack_cnt = 0
 
     def update(self, frame_time):
         self.total_frames += FRAMES_PER_ACTION * ACTION_PER_TIME * frame_time
         self.frame = int(self.total_frames + 1) % 8
+        self.attack_cnt += 1
 
-        self.attackcnt += 1
-
-    def draw(self, frame_time):
+    def draw(self):
         self.image.clip_draw(self.frame * 100, 0, 100, 100, self.x, self.y)
 
     def get_bb(self):
@@ -38,18 +33,15 @@ class Plant:
         draw_rectangle(*self.get_bb())
 
 class Attack:
-    def __init__(self):
+    def __init__(self, plant_x, plant_y):
         self.image = load_image('resource/attack.png')
-        self.x, self.y = 0, 0
-
-    def creat(self, plantx, planty):
-        self.x, self.y = plantx + 30, planty + 10
+        self.x, self.y = plant_x + 30, plant_y + 10
 
     def update(self, frame_time):
         distance = RUN_SPEED_PPS * frame_time
         self.x += distance
 
-    def draw(self, frame_time):
+    def draw(self):
         self.image.clip_draw(0, 0, 26, 26, self.x, self.y)
 
     def get_bb(self):
@@ -59,23 +51,18 @@ class Attack:
         draw_rectangle(*self.get_bb())
 
 class Flower:
-    def __init__(self):
+    def __init__(self, mouse_x, mouse_y):
         self.image = load_image('resource/flower.png')
-        self.x, self.y = 0, 0
+        self.x, self.y = int(mouse_x / 100) * 100 + 55, int(mouse_y / 100) * 100 + 50
         self.frame, self.total_frames = 0.0, 0.0
-        self.suncnt = 0
-
-    def creat(self, mousex, mousey):
-        self.x = int(mousex / 100) * 100 + 55
-        self.y = int(mousey / 100) * 100 + 50
+        self.sun_cnt = 0
 
     def update(self, frame_time):
         self.total_frames += FRAMES_PER_ACTION * ACTION_PER_TIME * frame_time
         self.frame = int(self.total_frames + 1) % 8
+        self.sun_cnt += 1
 
-        self.suncnt += 1
-
-    def draw(self, frame_time):
+    def draw(self):
         self.image.clip_draw(self.frame * 100, 0, 100, 100, self.x, self.y)
 
     def get_bb(self):
@@ -96,25 +83,21 @@ class Sun:
         self.total_frames += Sun.FRAMES_PER_ACTION * ACTION_PER_TIME * frame_time
         self.frame = int(self.total_frames + 1) % 2
 
-    def draw(self, frame_time):
+    def draw(self):
         self.image.clip_draw(int(self.frame * 100), 0, 100, 100, self.x, self.y)
 
 class Walnut:
-    def __init__(self):
+    def __init__(self, mouse_x, mouse_y):
         self.image = load_image('resource/walnut.png')
-        self.x, self.y = 0, 0
+        self.x, self.y = int(mouse_x / 100) * 100 + 55, int(mouse_y / 100) * 100 + 50
         self.frame, self.total_frames = 0.0, 0.0
         self.life = 1
-
-    def creat(self, mousex, mousey):
-        self.x = int(mousex / 100) * 100 + 55
-        self.y = int(mousey / 100) * 100 + 50
 
     def update(self, frame_time):
         self.total_frames += FRAMES_PER_ACTION * ACTION_PER_TIME * frame_time
         self.frame = int(self.total_frames + 1) % 8
 
-    def draw(self, frame_time):
+    def draw(self):
         self.image.clip_draw(self.frame * 100, 0, 100, 100, self.x, self.y)
 
     def get_bb(self):
@@ -125,20 +108,16 @@ class Walnut:
 
 # stage2
 class Bomb:
-    def __init__(self):
+    def __init__(self, mouse_x, mouse_y):
         self.image = load_image('resource/bomb.png')
-        self.x, self.y = 0, 0
+        self.x, self.y = int(mouse_x / 100) * 100 + 55, int(mouse_y / 100) * 100 + 50
         self.frame, self.total_frames = 0.0, 0.0
-
-    def creat(self, mousex, mousey):
-        self.x = int(mousex / 100) * 100 + 55
-        self.y = int(mousey / 100) * 100 + 50
 
     def update(self, frame_time):
         self.total_frames += FRAMES_PER_ACTION * ACTION_PER_TIME * frame_time
         self.frame = int(self.total_frames + 1) % 4
 
-    def draw(self, frame_time):
+    def draw(self):
         self.image.clip_draw(self.frame * 100, 0, 100, 100, self.x, self.y)
 
     def get_bb(self):
@@ -149,23 +128,19 @@ class Bomb:
 
 # stage3
 class Snow_Plant:
-    def __init__(self):
+    def __init__(self, mouse_x, mouse_y):
         self.image = load_image('resource/snow_plant.PNG')
-        self.x, self.y = 0, 0
+        self.x, self.y = int(mouse_x / 100) * 100 + 55, int(mouse_y / 100) * 100 + 50
         self.frame, self.total_frames = 0.0, 0.0
-        self.attackcnt = 0
-
-    def creat(self, mousex, mousey):
-        self.x = int(mousex / 100) * 100 + 55
-        self.y = int(mousey / 100) * 100 + 50
+        self.attack_cnt = 0
 
     def update(self, frame_time):
         self.total_frames += FRAMES_PER_ACTION * ACTION_PER_TIME * frame_time
         self.frame = int(self.total_frames + 1) % 8
 
-        self.attackcnt += 1
+        self.attack_cnt += 1
 
-    def draw(self, frame_time):
+    def draw(self):
         self.image.clip_draw(self.frame * 100, 0, 100, 100, self.x, self.y)
 
     def get_bb(self):
@@ -175,18 +150,15 @@ class Snow_Plant:
         draw_rectangle(*self.get_bb())
 
 class Snow_Attack:
-    def __init__(self):
+    def __init__(self, snow_x, snow_y):
         self.image = load_image('resource/snow_attack.png')
-        self.x, self.y = 0, 0
-
-    def creat(self, snowx, snowy):
-        self.x, self.y = snowx + 30, snowy + 10
+        self.x, self.y = snow_x + 30, snow_y + 10
 
     def update(self, frame_time):
         distance = RUN_SPEED_PPS * frame_time
         self.x += distance
 
-    def draw(self, frame_time):
+    def draw(self):
         self.image.clip_draw(0, 0, 26, 26, self.x, self.y)
 
     def get_bb(self):

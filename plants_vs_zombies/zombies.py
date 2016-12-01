@@ -46,7 +46,7 @@ class Zombie:
             if self.die_frame == 7:
                 self.state = self.END
 
-    def draw(self, frame_time):
+    def draw(self):
         if self.state == self.WALK:
             self.walk_image.clip_draw(self.walk_frame*150, 0, 150, 150, self.x, self.y)
         if self.state == self.ATTACK:
