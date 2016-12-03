@@ -13,7 +13,7 @@ from stage import*
 name = "MainState"
 
 # 객체
-stage = None
+stage, item = None, None
 plants, attacks = None, None
 flowers, suns = None, None
 walnuts = None
@@ -21,17 +21,19 @@ bombs = None
 snows, snow_attacks = None, None
 zombies = None
 
-Not_Select, Plant_Select, Flower_Select,Walnut_Select, Bomb_Select, Snow_Select, Remove_Select = 0, 1, 2, 3, 4, 5, 6
+Not_Select, Plant_Select, Flower_Select,Walnut_Select, Bomb_Select, Snow_Select, Shovel_Select = 0, 1, 2, 3, 4, 5, 6
 
 mouse_x, mouse_y = 0, 0
 sun_point = 1000
 select_plant = Not_Select
-space = [[0 for col in range(20)] for row in range(20)]
+space = [[0 for col in range(5)] for row in range(8)]
 
 def enter():
-    global stage, plants, flowers, walnuts, bombs, snows, zombies
+    global stage, item
+    global plants, flowers, walnuts, bombs, snows, zombies
     global attacks, snow_attacks, suns
     stage = Stage()
+    item = Item()
     plants = []
     attacks = []
     flowers = []
@@ -43,10 +45,12 @@ def enter():
     zombies = []
 
 def exit():
-    global stage, plants, flowers, walnuts, bombs, snows, zombies
+    global stage, item
+    global plants, flowers, walnuts, bombs, snows, zombies
     global attacks, snow_attacks, suns
     change_stage()
     del(stage)
+    del(item)
     del(plants)
     del(attacks)
     del(flowers)
@@ -66,7 +70,8 @@ def resume():
 def select_space():
     global space, select_plant
     global mouse_x, mouse_y
-    space[int(mouse_x / 100)][int(mouse_y / 100)] = 1
+    space_x, space_y = mouse_x - 200, mouse_y - 100
+    space[int(space_x / 100)][int(space_y / 100)] = 1
     select_plant = Not_Select
 
 def select_item():
@@ -84,8 +89,11 @@ def select_item():
     elif 320 < mouse_x < 365:
         if stage.state == 'stage3':
             select_plant = Snow_Select
-    elif 500 < mouse_x < 575:  # 삽
-        select_plant = Not_Select
+    elif 500 < mouse_x < 575:
+        if 0 < select_plant:
+            select_plant = Not_Select
+        else:
+            select_plant = Shovel_Select
 
 def select_sun():
     global suns, sun_point
@@ -94,12 +102,46 @@ def select_sun():
         sun_point += sun_count * 15
         suns.clear()
 
+def select_shovel():
+    global plants, flowers, walnuts, bombs, snows
+    global mouse_x
+
+    int_mouse_x = int(mouse_x / 100) * 100 + 55
+
+    for plant in plants:
+        if plant.x == int_mouse_x:
+            remove_plant(plant.x, plant.y)
+            plants.remove(plant)
+            return
+    for flower in flowers:
+        if flower.x == int_mouse_x:
+            remove_plant(flower.x, flower.y)
+            flowers.remove(flower)
+            return
+    for walnut in walnuts:
+        if walnut.x == int_mouse_x:
+            remove_plant(walnut.x, walnut.y)
+            walnuts.remove(walnut)
+            return
+    for bomb in bombs:
+        if bomb.x == int_mouse_x:
+            remove_plant(bomb.x, bomb.y)
+            bombs.remove(bomb)
+            return
+    for snow in snows:
+        if snow.x == int_mouse_x:
+            remove_plant(snow.x, snow.y)
+            snows.remove(snow)
+
 def select_object():
     global plants, flowers, walnuts, bombs, snows
     global mouse_x, mouse_y
     global select_plant, space, sun_point
-    if 260 < mouse_x < 980 and 90 < mouse_y < 600: # 땅
-        if space[int(mouse_x / 100)][int(mouse_y / 100)] == 0:
+    global space
+    print(space)
+    if 210 < mouse_x < 1000 and 110 < mouse_y < 600: # 땅
+        space_x, space_y = mouse_x - 200, mouse_y - 100
+        if space[int(space_x / 100)][int(space_y / 100)] == 0:
             if select_plant == Plant_Select and sun_point - 100 >= 0:
                 sun_point -= 100
                 new_plant = Plant(mouse_x, 599 - mouse_y)
@@ -125,6 +167,9 @@ def select_object():
                 new_snow = Snow_Plant(mouse_x, 599 - mouse_y)
                 snows.append(new_snow)
                 select_space()
+        else:
+            if select_plant == Shovel_Select:
+                select_shovel()
     elif 100 < mouse_x < 580 and 0 < mouse_y < 80:
         select_item()
     elif 25 < mouse_x < 75 and 20 < mouse_y < 65:
@@ -167,6 +212,11 @@ def remove():
         if snow_attack.x > 1400:
             snow_attacks.remove(snow_attack)
 
+def remove_plant(x, y):
+    global space
+    space_col, space_row = (x - 55) / 100 - 2, 4 - (y - 50) / 100
+    space[int(space_col)][int(space_row)] = 0
+
 def collide(a, b):
     left_a, bottom_a, right_a, top_a = a.get_bb()
     left_b, bottom_b, right_b, top_b = b.get_bb()
@@ -179,7 +229,6 @@ def collide(a, b):
         return False
     if bottom_a > top_b:
         return False
-
     return True
 
 def collide_check():
@@ -188,14 +237,17 @@ def collide_check():
     for zombie in zombies:
         for plant in plants:
             if collide(zombie, plant):
+                remove_plant(plant.x, plant.y)
                 plants.remove(plant)
                 zombie.state = zombie.ATTACK
         for flower in flowers:
             if collide(zombie, flower):
+                remove_plant(flower.x, flower.y)
                 flowers.remove(flower)
                 zombie.state = zombie.ATTACK
         for snow in snows:
             if collide(zombie, snow):
+                remove_plant(snow.x, snow.y)
                 snows.remove(snow)
                 zombie.state = zombie.ATTACK
         for walnut in walnuts:
@@ -204,10 +256,12 @@ def collide_check():
                     if walnut.life > 0:
                         walnut.life -= 1
                     else:
+                        remove_plant(walnut.x, walnut.y)
                         walnuts.remove(walnut)
                 zombie.state = zombie.DIE
         for bomb in bombs:
             if collide(zombie, bomb):
+                remove_plant(bomb.x, bomb.y)
                 bombs.remove(bomb)
                 zombie.state = zombie.DIE
         for attack in attacks:
@@ -237,13 +291,11 @@ def change_stage():
     mouse_x, mouse_y = 0, 0
     select_plant = Not_Select
     sun_point = 1000
-    for i in range(20):
-        for j in range(20):
-            space[i][j] = 0
+    space = [[0 for col in range(5)] for row in range(8)]
 
 def handle_events(frame_time):
     global stage, mouse_x, mouse_y
-
+    #print(mouse_x, ", ", mouse_y)
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -265,10 +317,12 @@ def handle_events(frame_time):
             select_object()
 
 def update(frame_time):
-    global stage, plants, flowers, walnuts, bombs, snows, zombies
+    global stage, item
+    global plants, flowers, walnuts, bombs, snows, zombies
     global attacks, snow_attacks, suns
 
     stage.update()
+    item.update(frame_time)
     for plant in plants:
         plant.update(frame_time)
     for attack in attacks:
@@ -292,11 +346,13 @@ def update(frame_time):
     collide_check()
 
 def draw(frame_time):
-    global stage, plants, flowers, walnuts, bombs, snows, zombies
+    global stage, item
+    global plants, flowers, walnuts, bombs, snows, zombies
     global attacks, snow_attacks, suns
     global select_plant, sun_point
+    global mouse_x, mouse_y
     clear_canvas()
-    stage.draw(select_plant, sun_point)
+    stage.draw(sun_point)
     for plant in plants:
         plant.draw()
     for flower in flowers:
@@ -309,6 +365,7 @@ def draw(frame_time):
         snow.draw()
     for zombie in zombies:
         zombie.draw()
+    item.draw(select_plant, mouse_x, 600 - mouse_y)
     for attack in attacks:
         attack.draw()
     for snow_attack in snow_attacks:
