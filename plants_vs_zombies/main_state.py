@@ -76,7 +76,7 @@ def select_space():
 
 def select_item():
     global stage
-    global mouse_x, mouse_y, select_plant
+    global mouse_x, select_plant
     if 100 < mouse_x < 155:
         select_plant = Plant_Select
     elif 160 < mouse_x < 210:
@@ -104,32 +104,33 @@ def select_sun():
 
 def select_shovel():
     global plants, flowers, walnuts, bombs, snows
-    global mouse_x
+    global mouse_x, mouse_y
 
-    int_mouse_x = int(mouse_x / 100) * 100 + 55
+    plants_x = int(mouse_x / 100) * 100 + 55
+    plants_y = int((600-mouse_y) / 100) * 100 + 50
 
     for plant in plants:
-        if plant.x == int_mouse_x:
+        if plant.x == plants_x and plant.y == plants_y:
             remove_plant(plant.x, plant.y)
             plants.remove(plant)
             return
     for flower in flowers:
-        if flower.x == int_mouse_x:
+        if flower.x == plants_x and flower.y == plants_y:
             remove_plant(flower.x, flower.y)
             flowers.remove(flower)
             return
     for walnut in walnuts:
-        if walnut.x == int_mouse_x:
+        if walnut.x == plants_x and walnut.y == plants_y:
             remove_plant(walnut.x, walnut.y)
             walnuts.remove(walnut)
             return
     for bomb in bombs:
-        if bomb.x == int_mouse_x:
+        if bomb.x == plants_x and bomb.y == plants_y:
             remove_plant(bomb.x, bomb.y)
             bombs.remove(bomb)
             return
     for snow in snows:
-        if snow.x == int_mouse_x:
+        if snow.x == plants_x and snow.y == plants_y:
             remove_plant(snow.x, snow.y)
             snows.remove(snow)
 
@@ -138,7 +139,6 @@ def select_object():
     global mouse_x, mouse_y
     global select_plant, space, sun_point
     global space
-    print(space)
     if 210 < mouse_x < 1000 and 110 < mouse_y < 600: # 땅
         space_x, space_y = mouse_x - 200, mouse_y - 100
         if space[int(space_x / 100)][int(space_y / 100)] == 0:

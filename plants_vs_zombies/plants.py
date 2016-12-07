@@ -137,7 +137,6 @@ class Snow_Plant:
     def update(self, frame_time):
         self.total_frames += FRAMES_PER_ACTION * ACTION_PER_TIME * frame_time
         self.frame = int(self.total_frames + 1) % 8
-
         self.attack_cnt += 1
 
     def draw(self):
