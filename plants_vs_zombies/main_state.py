@@ -13,7 +13,7 @@ from stage import*
 name = "MainState"
 
 # 객체
-stage, item = None, None
+stage, item, end = None, None, None
 plants, attacks = None, None
 flowers, suns = None, None
 walnuts = None
@@ -24,16 +24,17 @@ zombies = None
 Not_Select, Plant_Select, Flower_Select,Walnut_Select, Bomb_Select, Snow_Select, Shovel_Select = 0, 1, 2, 3, 4, 5, 6
 
 mouse_x, mouse_y = 0, 0
-sun_point = 1000
+sun_point = 500
 select_plant = Not_Select
 space = [[0 for col in range(5)] for row in range(8)]
 
 def enter():
-    global stage, item
+    global stage, item, end
     global plants, flowers, walnuts, bombs, snows, zombies
     global attacks, snow_attacks, suns
     stage = Stage()
     item = Item()
+    end = Game_End()
     plants = []
     attacks = []
     flowers = []
@@ -45,12 +46,13 @@ def enter():
     zombies = []
 
 def exit():
-    global stage, item
+    global stage, item, end
     global plants, flowers, walnuts, bombs, snows, zombies
     global attacks, snow_attacks, suns
     change_stage()
     del(stage)
     del(item)
+    del(end)
     del(plants)
     del(attacks)
     del(flowers)
@@ -105,7 +107,6 @@ def select_sun():
 def select_shovel():
     global plants, flowers, walnuts, bombs, snows
     global mouse_x, mouse_y
-
     plants_x = int(mouse_x / 100) * 100 + 55
     plants_y = int((600-mouse_y) / 100) * 100 + 50
 
@@ -183,7 +184,7 @@ def creat():
         zombies.append(new_zombie)
         stage.zombie_set_count()
     for plant in plants:
-        if plant.attack_cnt == 200:
+        if plant.attack_cnt == 150:
             new_attack = Attack(plant.x, plant.y)
             attacks.append(new_attack)
             plant.attack_cnt = 0
@@ -233,7 +234,6 @@ def collide(a, b):
 
 def collide_check():
     global plants, flowers, walnuts, zombies, attacks, bombs, snows, snow_attacks
-
     for zombie in zombies:
         for plant in plants:
             if collide(zombie, plant):
@@ -290,8 +290,17 @@ def change_stage():
     stage.cnt_init()
     mouse_x, mouse_y = 0, 0
     select_plant = Not_Select
-    sun_point = 1000
+    sun_point = 500
     space = [[0 for col in range(5)] for row in range(8)]
+
+def game_end():
+    global end, stage, zombies
+
+    if stage.bar_cnt == 280:
+        end.state = 'plant'
+    for zombie in zombies:
+        if zombie.x < 0:
+            end.state = 'zombie'
 
 def handle_events(frame_time):
     global stage, mouse_x, mouse_y
@@ -317,59 +326,64 @@ def handle_events(frame_time):
             select_object()
 
 def update(frame_time):
-    global stage, item
+    global stage, item, end
     global plants, flowers, walnuts, bombs, snows, zombies
     global attacks, snow_attacks, suns
 
-    stage.update()
-    item.update(frame_time)
-    for plant in plants:
-        plant.update(frame_time)
-    for attack in attacks:
-        attack.update(frame_time)
-    for flower in flowers:
-        flower.update(frame_time)
-    for snow in snows:
-        snow.update(frame_time)
-    for snow_attack in snow_attacks:
-        snow_attack.update(frame_time)
-    for sun in suns:
-        sun.update(frame_time)
-    for walnut in walnuts:
-        walnut.update(frame_time)
-    for bomb in bombs:
-        bomb.update(frame_time)
-    for zombie in zombies:
-        zombie.update(frame_time)
-    creat()
-    remove()
-    collide_check()
+    if end.state == 'play':
+        stage.update()
+        item.update(frame_time)
+        for plant in plants:
+            plant.update(frame_time)
+        for attack in attacks:
+            attack.update(frame_time)
+        for flower in flowers:
+            flower.update(frame_time)
+        for snow in snows:
+            snow.update(frame_time)
+        for snow_attack in snow_attacks:
+            snow_attack.update(frame_time)
+        for sun in suns:
+            sun.update(frame_time)
+        for walnut in walnuts:
+            walnut.update(frame_time)
+        for bomb in bombs:
+            bomb.update(frame_time)
+        for zombie in zombies:
+            zombie.update(frame_time)
+        game_end()
+        creat()
+        remove()
+        collide_check()
 
 def draw(frame_time):
-    global stage, item
+    global stage, item, end
     global plants, flowers, walnuts, bombs, snows, zombies
     global attacks, snow_attacks, suns
     global select_plant, sun_point
     global mouse_x, mouse_y
     clear_canvas()
-    stage.draw(sun_point)
-    for plant in plants:
-        plant.draw()
-    for flower in flowers:
-        flower.draw()
-    for walnut in walnuts:
-        walnut.draw()
-    for bomb in bombs:
-        bomb.draw()
-    for snow in snows:
-        snow.draw()
-    for zombie in zombies:
-        zombie.draw()
-    item.draw(select_plant, mouse_x, 600 - mouse_y)
-    for attack in attacks:
-        attack.draw()
-    for snow_attack in snow_attacks:
-        snow_attack.draw()
-    for sun in suns:
-        sun.draw()
+    if end.state == 'play':
+        stage.draw(sun_point)
+        for plant in plants:
+            plant.draw()
+        for flower in flowers:
+            flower.draw()
+        for walnut in walnuts:
+            walnut.draw()
+        for bomb in bombs:
+            bomb.draw()
+        for snow in snows:
+            snow.draw()
+        for zombie in zombies:
+            zombie.draw()
+        item.draw(select_plant, mouse_x, 600 - mouse_y)
+        for attack in attacks:
+            attack.draw()
+        for snow_attack in snow_attacks:
+            snow_attack.draw()
+        for sun in suns:
+            sun.draw()
+    else:
+        end.draw()
     update_canvas()
