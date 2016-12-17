@@ -26,7 +26,8 @@ class Stage:
     def update(self):
         self.zombie_cnt += 1
         self.total_bar_cnt += 1
-        if int(self.total_bar_cnt % 100) == 0:
+        if int(self.total_bar_cnt % 50) == 0:
+            print(self.bar_cnt)
             self.bar_cnt += 1
 
     def draw(self, sun_point):
@@ -42,12 +43,15 @@ class Stage:
         self.bar_zombie_image.clip_draw(0, 0, 57, 57, 1370 - self.bar_cnt, 50)
 
     def zombie_set_count(self):
-        if self.state == 'stage1':
-            self.random_cnt = random.randint(100, 150)
-        elif self.state == 'stage2':
-            self.random_cnt = random.randint(100, 130)
-        elif self.state == 'stage3':
-            self.random_cnt = random.randint(100, 110)
+        if self.bar_cnt < 50:
+            self.random_cnt = random.randint(200, 300)
+        else:
+            if self.state == 'stage1':
+                self.random_cnt = random.randint(100, 110)
+            elif self.state == 'stage2':
+                self.random_cnt = random.randint(80, 100)
+            elif self.state == 'stage3':
+                self.random_cnt = random.randint(70, 80)
         self.zombie_cnt = 0
 
     def cnt_init(self):

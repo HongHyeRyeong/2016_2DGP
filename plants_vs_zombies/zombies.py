@@ -19,7 +19,7 @@ class Zombie:
         self.attack_image = load_image('resource/zom_attack.png')
         self.die_image = load_image('resource/zom_die.png')
         self.x, self.y = 1400, (random.randint(0, 4)*100)+60
-        self.slow = 0
+        self.speed, self.life = 0, 3
         self.attack_time = 0.0
         self.state = self.WALK
         self.total_frames = 0.0
@@ -31,9 +31,9 @@ class Zombie:
 
         if self.state == self.WALK:
             self.walk_frame = int(self.total_frames) % 8
-            if self.slow == 0:
+            if self.speed == 0:
                 self.x -= distance
-            else: self.x -= (distance / self.slow)
+            else: self.x -= (distance / self.speed)
         elif self.state == self.ATTACK:
             self.attack_frame = int(self.total_frames) % 5
             self.attack_time += frame_time
@@ -52,6 +52,12 @@ class Zombie:
             self.attack_image.clip_draw(self.attack_frame*150, 0, 150, 150, self.x, self.y)
         if self.state == self.DIE:
             self.die_image.clip_draw(self.die_frame*200, 0, 200, 200, self.x, self.y)
+
+    def attack(self):
+        if self.life == 1:
+            self.state = self.DIE
+        else:
+            self.life -= 1
 
     def get_bb(self):
         return self.x - 15, self.y - 55, self.x + 35, self.y + 25

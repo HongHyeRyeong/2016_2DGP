@@ -101,7 +101,7 @@ def select_sun():
     global suns, sun_point
     sun_count = len(suns)
     if not sun_count == 0:
-        sun_point += sun_count * 15
+        sun_point += sun_count * 10
         suns.clear()
 
 def select_shovel():
@@ -266,11 +266,11 @@ def collide_check():
                 zombie.state = zombie.DIE
         for attack in attacks:
             if collide(attack, zombie):
-                zombie.state = zombie.DIE
+                zombie.attack()
                 attacks.remove(attack)
         for snow_attack in snow_attacks:
             if collide(snow_attack, zombie):
-                zombie.slow += 1
+                zombie.speed += 1
                 snow_attacks.remove(snow_attack)
 
 def change_stage():
@@ -295,7 +295,6 @@ def change_stage():
 
 def game_end():
     global end, stage, zombies
-
     if stage.bar_cnt == 280:
         end.state = 'plant'
     for zombie in zombies:
