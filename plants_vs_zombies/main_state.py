@@ -70,8 +70,9 @@ def resume():
     pass
 
 def select_space():
-    global space, select_plant
+    global space, item, select_plant
     global mouse_x, mouse_y
+    item.plant()
     space_x, space_y = mouse_x - 200, mouse_y - 100
     space[int(space_x / 100)][int(space_y / 100)] = 1
     select_plant = Not_Select
@@ -98,7 +99,8 @@ def select_item():
             select_plant = Shovel_Select
 
 def select_sun():
-    global suns, sun_point
+    global item, suns, sun_point
+    item.coin()
     sun_count = len(suns)
     if not sun_count == 0:
         sun_point += sun_count * 10
@@ -296,10 +298,10 @@ def change_stage():
 def game_end():
     global end, stage, zombies
     if stage.bar_cnt == 280:
-        end.state = 'plant'
+        end.plant()
     for zombie in zombies:
         if zombie.x < 0:
-            end.state = 'zombie'
+            end.zombie()
 
 def handle_events(frame_time):
     global stage, mouse_x, mouse_y

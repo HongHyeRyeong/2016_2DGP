@@ -27,7 +27,6 @@ class Stage:
         self.zombie_cnt += 1
         self.total_bar_cnt += 1
         if int(self.total_bar_cnt % 50) == 0:
-            print(self.bar_cnt)
             self.bar_cnt += 1
 
     def draw(self, sun_point):
@@ -59,9 +58,18 @@ class Stage:
         self.bar_cnt, self.total_bar_cnt = 0, 0
 
 class Item:
+    coin_sound = None
+    set_plant_sound = None
+
     def __init__(self):
         self.select_image = load_image('resource/select_plant.png')
         self.shovel_image = load_image('resource/shovel.png')
+        if self.set_plant_sound == None:
+            self.coin_sound = load_wav('resource/coin.wav')
+            self.coin_sound.set_volume(32)
+        if self.set_plant_sound == None:
+            self.set_plant_sound = load_wav('resource/set_plant.wav')
+            self.set_plant_sound.set_volume(32)
         self.shovel_frame, self.shovel_total_frames = 0.0, 0.0
 
     def update(self, frame_time):
@@ -75,14 +83,40 @@ class Item:
             self.select_image.clip_draw((select_plant - 1) * 100 + 10, 0, 100, 100, mouse_x, mouse_y)
         self.select_image.clip_draw((select_plant - 1) * 100 + 10, 0, 100, 100, 1350, 545)
 
+    def coin(self):
+        self.coin_sound.play()
+
+    def plant(self):
+        self.set_plant_sound.play()
+
 class Game_End:
     def __init__(self):
         self.plant_image = load_image('resource/end_plant.png')
         self.zombie_image = load_image('resource/end_zombie.png')
+        self.play_bgm = load_music('resource/play.mp3')
+        self.plant_bgm = load_music('resource/end_plant.mp3')
+        self.zombie_bgm = load_music('resource/end_zombie.mp3')
         self.state = 'play'
+        self.play()
 
     def draw(self):
         if self.state == 'plant':
             self.plant_image.draw(700, 300)
         elif self.state == 'zombie':
             self.zombie_image.draw(700, 300)
+
+    def play(self):
+        self.play_bgm.set_volume(50)
+        self.play_bgm.repeat_play()
+
+    def plant(self):
+        self.state = 'plant'
+        self.play_bgm.stop()
+        self.plant_bgm.set_volume(50)
+        self.plant_bgm.repeat_play()
+
+    def zombie(self):
+        self.state = 'zombie'
+        self.play_bgm.stop()
+        self.zombie_bgm.set_volume(100)
+        self.zombie_bgm.repeat_play()
