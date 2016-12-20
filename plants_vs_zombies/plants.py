@@ -1,5 +1,6 @@
 from pico2d import *
 import random
+import time
 
 PIXEL_PER_METER = (10.0 / 0.5)  # 10 pixel 50 cm
 RUN_SPEED_KMPH = 25.0  # Km / Hour 속도
@@ -16,12 +17,15 @@ class Plant:
         self.image = load_image('resource/plant.png')
         self.x, self.y = int(mouse_x / 100) * 100 + 55, int(mouse_y / 100) * 100 + 50
         self.frame, self.total_frames = 0.0, 0.0
-        self.attack_cnt = 0
+        self.check_time, self.attack_time = time.time(), 0
 
     def update(self, frame_time):
         self.total_frames += FRAMES_PER_ACTION * ACTION_PER_TIME * frame_time
         self.frame = int(self.total_frames + 1) % 8
-        self.attack_cnt += 1
+
+        if self.check_time + 1 < time.time():
+            self.check_time = time.time()
+            self.attack_time += 1
 
     def draw(self):
         self.image.clip_draw(self.frame * 100, 0, 100, 100, self.x, self.y)
@@ -55,12 +59,15 @@ class Flower:
         self.image = load_image('resource/flower.png')
         self.x, self.y = int(mouse_x / 100) * 100 + 55, int(mouse_y / 100) * 100 + 50
         self.frame, self.total_frames = 0.0, 0.0
-        self.sun_cnt = 0
+        self.check_time, self.sun_time = time.time(), 0
 
     def update(self, frame_time):
         self.total_frames += FRAMES_PER_ACTION * ACTION_PER_TIME * frame_time
         self.frame = int(self.total_frames + 1) % 8
-        self.sun_cnt += 1
+
+        if self.check_time + 1 < time.time():
+            self.check_time = time.time()
+            self.sun_time += 1
 
     def draw(self):
         self.image.clip_draw(self.frame * 100, 0, 100, 100, self.x, self.y)
@@ -132,12 +139,15 @@ class Snow_Plant:
         self.image = load_image('resource/snow_plant.PNG')
         self.x, self.y = int(mouse_x / 100) * 100 + 55, int(mouse_y / 100) * 100 + 50
         self.frame, self.total_frames = 0.0, 0.0
-        self.attack_cnt = 0
+        self.check_time, self.attack_time = time.time(), 0
 
     def update(self, frame_time):
         self.total_frames += FRAMES_PER_ACTION * ACTION_PER_TIME * frame_time
         self.frame = int(self.total_frames + 1) % 8
-        self.attack_cnt += 1
+
+        if self.check_time + 1 < time.time():
+            self.check_time = time.time()
+            self.attack_time += 1
 
     def draw(self):
         self.image.clip_draw(self.frame * 100, 0, 100, 100, self.x, self.y)

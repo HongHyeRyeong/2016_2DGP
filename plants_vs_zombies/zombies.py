@@ -19,7 +19,7 @@ class Zombie:
         self.attack_image = load_image('resource/zom_attack.png')
         self.die_image = load_image('resource/zom_die.png')
         self.x, self.y = 1400, (random.randint(0, 4)*100)+60
-        self.speed, self.life = 0, 3
+        self.speed, self.life = 0, 4
         self.attack_time = 0.0
         self.state = self.WALK
         self.total_frames = 0.0

@@ -178,28 +178,38 @@ def select_object():
     elif 25 < mouse_x < 75 and 20 < mouse_y < 65:
         select_sun()
 
+def creat_zombie():
+    global stage, zombies
+    new_zombie = Zombie()
+    zombies.append(new_zombie)
+    stage.zombie_time = 0
+
 def creat():
     global stage, plants, zombies, attacks, suns, flowers, snows, snow_attacks
-
-    if stage.zombie_cnt == stage.random_cnt:
-        new_zombie = Zombie()
-        zombies.append(new_zombie)
-        stage.zombie_set_count()
+    if stage.bar_time < 50:
+        if 3 == stage.zombie_time:
+            creat_zombie()
+    elif 150 < stage.bar_time:
+        if 0.5 == stage.zombie_time:
+            creat_zombie()
+    else:
+        if 1 == stage.zombie_time:
+            creat_zombie()
     for plant in plants:
-        if plant.attack_cnt == 150:
+        if 2 == plant.attack_time:
             new_attack = Attack(plant.x, plant.y)
             attacks.append(new_attack)
-            plant.attack_cnt = 0
+            plant.attack_time = 0
     for snow in snows:
-        if snow.attack_cnt == 200:
+        if 2 == snow.attack_time:
             new_attack = Snow_Attack(snow.x, snow.y)
             snow_attacks.append(new_attack)
-            snow.attack_cnt = 0
+            snow.attack_time = 0
     for flower in flowers:
-        if flower.sun_cnt == 300:
+        if 3 == flower.sun_time:
             new_sun = Sun()
             suns.append(new_sun)
-            flower.sun_cnt = 0
+            flower.sun_time = 0
 
 def remove():
     global attacks, zombies, snow_attacks
@@ -276,7 +286,8 @@ def collide_check():
                 snow_attacks.remove(snow_attack)
 
 def change_stage():
-    global stage, plants, flowers, walnuts, zombies, attacks, suns, bombs, snows, snow_attacks
+    global stage, end
+    global plants, flowers, walnuts, zombies, attacks, suns, bombs, snows, snow_attacks
     global mouse_x, mouse_y
     global select_plant, space
     global sun_point
@@ -290,6 +301,7 @@ def change_stage():
     snow_attacks.clear()
     zombies.clear()
     stage.cnt_init()
+    end.play()
     mouse_x, mouse_y = 0, 0
     select_plant = Not_Select
     sun_point = 500
@@ -297,7 +309,7 @@ def change_stage():
 
 def game_end():
     global end, stage, zombies
-    if stage.bar_cnt == 280:
+    if 270 == stage.bar_time:
         end.plant()
     for zombie in zombies:
         if zombie.x < 0:
@@ -305,7 +317,6 @@ def game_end():
 
 def handle_events(frame_time):
     global stage, mouse_x, mouse_y
-    #print(mouse_x, ", ", mouse_y)
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:

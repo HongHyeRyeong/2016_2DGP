@@ -1,5 +1,5 @@
 from pico2d import *
-import random
+import time
 
 PIXEL_PER_METER = (10.0 / 0.5)  # 10 pixel 50 cm
 RUN_SPEED_KMPH = 25.0  # Km / Hour 속도
@@ -20,14 +20,23 @@ class Stage:
         self.bar_zombie_image = load_image('resource/zombie_bar.png')
         self.font = load_font('resource/ConsolaMalgun.ttf', 17)
         self.state = 'stage1'
-        self.zombie_cnt, self.random_cnt = 0, 10
-        self.bar_cnt, self.total_bar_cnt = 0, 0
+        self.check_time = time.time()
+        self.zombie_time, self.bar_time, self.bar_total_time = 2, 0, 0
 
     def update(self):
-        self.zombie_cnt += 1
-        self.total_bar_cnt += 1
-        if int(self.total_bar_cnt % 50) == 0:
-            self.bar_cnt += 1
+        if self.check_time + 0.5 < time.time():
+            self.check_time = time.time()
+            self.zombie_time += 0.5
+            self.bar_total_time += 0.5
+
+        if 1 == self.bar_total_time:
+            self.bar_time += 1
+            self.bar_total_time = 0
+
+        if 50 == self.bar_time:
+            self.zombie_time = 0
+        elif 150 == self.bar_time:
+            self.zombie_time = 0
 
     def draw(self, sun_point):
         if self.state == 'stage1':
@@ -38,24 +47,11 @@ class Stage:
             self.stage3_image.draw(700, 300)
         self.font.draw(20, 504, '%d' % sun_point)
         self.bar_image.clip_draw(0, 0, 300, 60, 1230, 50)
-        self.bar_image.clip_draw_to_origin(0, 60, 300 - self.bar_cnt, 60, 1080, 21)
-        self.bar_zombie_image.clip_draw(0, 0, 57, 57, 1370 - self.bar_cnt, 50)
-
-    def zombie_set_count(self):
-        if self.bar_cnt < 50:
-            self.random_cnt = random.randint(200, 300)
-        else:
-            if self.state == 'stage1':
-                self.random_cnt = random.randint(100, 110)
-            elif self.state == 'stage2':
-                self.random_cnt = random.randint(80, 100)
-            elif self.state == 'stage3':
-                self.random_cnt = random.randint(70, 80)
-        self.zombie_cnt = 0
+        self.bar_image.clip_draw_to_origin(0, 60, 300 - self.bar_time, 60, 1080, 21)
+        self.bar_zombie_image.clip_draw(0, 0, 57, 57, 1370 - self.bar_time, 50)
 
     def cnt_init(self):
-        self.zombie_cnt, self.random_cnt = 0, 10
-        self.bar_cnt, self.total_bar_cnt = 0, 0
+        self.zombie_time, self.bar_time, self.bar_total_time = 2, 0, 0
 
 class Item:
     coin_sound = None
@@ -106,7 +102,8 @@ class Game_End:
             self.zombie_image.draw(700, 300)
 
     def play(self):
-        self.play_bgm.set_volume(50)
+        self.play_bgm.stop()
+        self.play_bgm.set_volume(45)
         self.play_bgm.repeat_play()
 
     def plant(self):
