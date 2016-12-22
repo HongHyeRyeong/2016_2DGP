@@ -186,10 +186,10 @@ def creat_zombie():
 
 def creat():
     global stage, plants, zombies, attacks, suns, flowers, snows, snow_attacks
-    if stage.bar_time < 50:
+    if stage.bar_time < 70:
         if 3 == stage.zombie_time:
             creat_zombie()
-    elif 150 < stage.bar_time:
+    elif 200 < stage.bar_time:
         if 0.5 == stage.zombie_time:
             creat_zombie()
     else:

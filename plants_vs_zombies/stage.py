@@ -33,9 +33,9 @@ class Stage:
             self.bar_time += 1
             self.bar_total_time = 0
 
-        if 50 == self.bar_time:
+        if 70 == self.bar_time:
             self.zombie_time = 0
-        elif 150 == self.bar_time:
+        elif 200 == self.bar_time:
             self.zombie_time = 0
 
     def draw(self, sun_point):
