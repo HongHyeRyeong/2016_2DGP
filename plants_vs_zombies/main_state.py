@@ -21,7 +21,7 @@ bombs = None
 snows, snow_attacks = None, None
 zombies = None
 
-Not_Select, Plant_Select, Flower_Select,Walnut_Select, Bomb_Select, Snow_Select, Shovel_Select = 0, 1, 2, 3, 4, 5, 6
+Not_Select, Plant_Select, Flower_Select, Walnut_Select, Bomb_Select, Snow_Select, Shovel_Select = 0, 1, 2, 3, 4, 5, 6
 
 mouse_x, mouse_y = 0, 0
 sun_point = 500
