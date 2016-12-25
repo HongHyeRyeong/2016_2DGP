@@ -23,7 +23,7 @@ class Zombie:
         self.attack_time = 0.0
         self.state = self.WALK
         self.total_frames = 0.0
-        self.walk_frame, self.attack_frame, self.die_frame = random.randint(0, 5), 0, 0
+        self.walk_frame, self.attack_frame, self.die_frame = 0, 0, 0
 
     def update(self, frame_time):
         distance = self.RUN_SPEED_PPS * frame_time
