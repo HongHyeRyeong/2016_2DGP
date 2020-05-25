@@ -1,7 +1,8 @@
 # Plants vs Zombies
-> 2D게임프로그래밍 강의를 들으며 진행한 게임 개발 프로젝트 입니다.
+> '2D게임프로그래밍' 강의를 들으며 진행한 게임 개발 프로젝트 입니다.
 
 python
+
 '식물 대 좀비'를 모티브로 한 게임으로 식물을 심어 좀비로부터 집을 지키는 디펜스 게임입니다.
 
 ![](image/main.png)
@@ -9,6 +10,7 @@ python
 ## 설치 방법
 
 install 폴더 안에 있는 plants_vs_zombies.exe 파일로 설치 할 수 있습니다.
+
 사용자 계정 컨트롤 박스가 뜨면 '예'를 클릭해주세요.
 
 ## 게임 플레이
@@ -20,7 +22,7 @@ install 폴더 안에 있는 plants_vs_zombies.exe 파일로 설치 할 수 있�
 5. 제한 시간 동안 좀비를 막아 집을 지키면 승리하고 만약 지키지 못하면 좀비의 승리입니다.
 
 ## 플레이 영상
-[][youtube-image][play-url]
+[![][youtube-image]][play-url]
 
 <!-- Markdown link & img dfn's -->
 [youtube-image]: https://t1.daumcdn.net/cfile/tistory/9950D24E5D0E420720
