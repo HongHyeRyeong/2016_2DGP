@@ -3,6 +3,7 @@
 
 '식물 대 좀비'를 모티브로 한 게임으로 식물을 심어 좀비로부터 집을 지키는 디펜스 게임입니다.
 * python
+* me-development
 
 ![](image/main.png)
 
