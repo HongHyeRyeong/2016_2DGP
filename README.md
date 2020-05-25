@@ -25,5 +25,5 @@ install 폴더 안에 있는 plants_vs_zombies.exe 파일로 설치 할 수 있�
 [![][youtube-image]][play-url]
 
 <!-- Markdown link & img dfn's -->
-[youtube-image]: https://t1.daumcdn.net/cfile/tistory/9950D24E5D0E420720
+[youtube-image]: https://cdn.iconscout.com/icon/free/png-256/youtube-86-226404.png
 [play-url]: https://www.youtube.com/watch?v=22TxMZaX9mk
