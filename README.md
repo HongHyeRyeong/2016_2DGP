@@ -3,7 +3,7 @@
 
 '식물 대 좀비'를 모티브로 한 게임으로 식물을 심어 좀비로부터 집을 지키는 디펜스 게임입니다.
 * python
-* me-development
+* game development
 
 ![](image/main.png)
 
@@ -29,5 +29,5 @@ install 폴더 안에 있는 plants_vs_zombies.exe 파일로 설치 할 수 있�
 
 
 <!-- Markdown link & img dfn's -->
-[youtube-image]: https://cdn.iconscout.com/icon/free/png-256/youtube-86-226404.png
+[youtube-image]: https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ0W15QOoCkGdmGAT4yoszK-lomT0IYZmOkZ_m_cGhQJEoHyY-Z&usqp=CAU
 [play-url]: https://www.youtube.com/watch?v=22TxMZaX9mk
