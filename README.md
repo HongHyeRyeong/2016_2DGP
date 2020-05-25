@@ -7,11 +7,13 @@ python
 
 ![](image/main.png)
 
+
 ## 설치 방법
 
 install 폴더 안에 있는 plants_vs_zombies.exe 파일로 설치 할 수 있습니다.
 
 사용자 계정 컨트롤 박스가 뜨면 '예'를 클릭해주세요.
+
 
 ## 게임 플레이
 
@@ -21,8 +23,10 @@ install 폴더 안에 있는 plants_vs_zombies.exe 파일로 설치 할 수 있�
 4. 식물마다 소모되는 태양에너지가 다르고 태양에너지는 오직 해바라기 식물을 통해 모을 수 있습니다.
 5. 제한 시간 동안 좀비를 막아 집을 지키면 승리하고 만약 지키지 못하면 좀비의 승리입니다.
 
+
 ## 플레이 영상
 [![][youtube-image]][play-url]
+
 
 <!-- Markdown link & img dfn's -->
 [youtube-image]: https://cdn.iconscout.com/icon/free/png-256/youtube-86-226404.png
